@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hybrid Security Cryptography</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 1em;
+            position: fixed;
+            width: 100%;
+            top: 0;
+        }
+        h1 {
+            margin: 0;
+        }
+        .container {
+            margin-top: 80px; /* Space for fixed header */
+            padding: 20px;
+        }
+        .form-container {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin: 20px auto;
+            max-width: 600px;
+        }
+        .form-container input[type="file"], .form-container input[type="submit"] {
+            margin: 10px 0;
+            padding: 10px;
+            font-size: 16px;
+        }
+        img {
+            border-radius: 8px;
+            max-width: 100%;
+            height: auto;
+        }
+        .image-section {
+            margin: 20px 0;
+        }
+        .image-section h2 {
+            color: #4CAF50;
+        }
+        .btn {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 5px 2px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .btn:hover {
+            background-color: #45a049;
+        }
+        .alert {
+            color: #f44336;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Hybrid Security Cryptography</h1>
+    </header>
+
+    <div class="container">
+        <!-- Form to upload images -->
+        <div class="form-container">
+            <h2>Upload Images for Encryption</h2>
+            <form action="/" method="post" enctype="multipart/form-data">
+                <label for="image1">Image 1:</label><br>
+                <input type="file" name="image1" id="image1" required><br>
+                <label for="image2">Image 2:</label><br>
+                <input type="file" name="image2" id="image2" required><br>
+                <input type="submit" value="Upload Images" class="btn">
+            </form>
+        </div>
+
+        <!-- Display original images -->
+        {% if original1 %}
+            <div class="image-section">
+                <h2>Original Images</h2>
+                <img src="{{ url_for('uploaded_file', filename=original1) }}" alt="Image 1"><br><br>
+                <img src="{{ url_for('uploaded_file', filename=original2) }}" alt="Image 2">
+            </div>
+        {% endif %}
+
+        <!-- Display transformed image -->
+        {% if transformed %}
+            <div class="image-section">
+                <h2>Transformed Image (Hadamard)</h2>
+                <img src="{{ url_for('uploaded_file', filename=transformed) }}" alt="Transformed Image">
+            </div>
+        {% endif %}
+
+        <!-- Display merged image -->
+        {% if merged %}
+            <div class="image-section">
+                <h2>Merged Image</h2>
+                <img src="{{ url_for('uploaded_file', filename=merged) }}" alt="Merged Image">
+            </div>
+        {% endif %}
+
+        <!-- Display encrypted image -->
+        {% if encrypted %}
+            <div class="image-section">
+                <h2>Encrypted Image</h2>
+                <a href="{{ url_for('uploaded_file', filename=encrypted) }}" class="btn" download>Download Encrypted Image</a>
+            </div>
+        {% endif %}
+
+        <!-- Form to decrypt the image -->
+        <div class="form-container">
+            <h2>Decrypt Image</h2>
+            <form action="/decrypt" method="post">
+                <input type="submit" value="Decrypt Image" class="btn">
+            </form>
+        </div>
+
+        <!-- Display decrypted image -->
+        {% if decrypted %}
+            <div class="image-section">
+                <h2>Decrypted Image</h2>
+                <img src="{{ url_for('uploaded_file', filename=decrypted) }}" alt="Decrypted Image">
+            </div>
+        {% endif %}
+
+        <!-- Flash message for errors -->
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="alert">
+                    {% for message in messages %}
+                        <p>{{ message }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+    </div>
+</body>
+</html>
